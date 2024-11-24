@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Live Price</title>
+  <title>Dexscreener Live Price</title>
   <style>
     @font-face {
-     font-family: 'Neue Machina';
-     src: url('/static/fonts/NeueMachina-Regular.otf') format('opentype');
+      font-family: 'Neue Machina';
+      src: url('https://your-cloud-service.com/fonts/NeueMachina-Regular.otf') format('opentype');
     }
 
     body {
@@ -24,19 +25,19 @@
     }
 
     #price {
-      font-size: 200px; /* Büyük font boyutu */
+      font-size: 250px;
       font-weight: bold;
       margin: 0;
     }
 
     #price.green {
-      color: #47d7ac; /* Yeşilimsi renk (artış) */
+      color: #47d7ac;
     }
 
     #price.red {
-      color: #ff4c4c; /* Kırmızı renk (düşüş) */
+      color: #ff4c4c;
     }
-
+    
     #powered {
       margin-top: 20px;
       font-size: 16px;
@@ -45,38 +46,40 @@
     }
   </style>
   <script>
-    let previousPrice = 0; // Önceki fiyat
+    let previousPrice = 0;
 
-    function fetchPrice() {
-        fetch("/price") // Flask endpoint'ten fiyatı çek
-            .then(response => response.json())
-            .then(data => {
-                const currentPrice = data.current; // Mevcut fiyat
-                const priceElement = document.getElementById("price");
+    async function fetchPrice() {
+      const priceElement = document.getElementById('price');
+      try {
+        const response = await fetch("/price"); 
+        const data = await response.json();
+        const currentPrice = data.current;
 
-                // Fiyat değişimine göre renk güncelleme
-                if (currentPrice < previousPrice) {
-                    priceElement.className = "red"; // Düşüş durumunda kırmızı renk
-                } else {
-                    priceElement.className = "green"; // Artış durumunda yeşil renk
-                }
+        if (currentPrice < previousPrice) {
+          priceElement.className = "red";
+        } else {
+          priceElement.className = "green"; 
+        }
 
-                // Noktayı virgül ile değiştirerek fiyatı ekrana yazdır
-                const formattedPrice = currentPrice.toFixed(6).replace('.', ',');
-                priceElement.textContent = `${formattedPrice}`;
-                previousPrice = currentPrice; // Mevcut fiyatı önceki fiyat olarak kaydet
-            })
-            .catch(error => console.error("Fiyat çekme hatası:", error));
+        const formattedPrice = currentPrice.toString().replace('.', ',');
+        priceElement.textContent = formattedPrice; 
+        previousPrice = currentPrice; 
+      } catch (error) {
+        console.error("Error fetching price:", error);
+        priceElement.textContent = "Error fetching price";
+      }
     }
 
-    setInterval(fetchPrice, 5000); // Her 5 saniyede bir fiyatı güncelle
-    window.onload = fetchPrice; // Sayfa yüklendiğinde fiyatı çek
+    setInterval(fetchPrice, 5000); 
+    fetchPrice();
   </script>
 </head>
+
 <body>
   <div id="container">
     <div id="price">Loading...</div>
     <div id="powered">powered by OPERATIVES</div>
   </div>
 </body>
+
 </html>

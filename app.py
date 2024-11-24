@@ -1,62 +1,60 @@
-import os
 from flask import Flask, render_template, jsonify
-from requests import Session, ConnectionError, Timeout, TooManyRedirects
-import json
+import requests
 import threading
 import time
 
 app = Flask(__name__)
 
-# API ve global değişkenler
-url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
-parameters = {
-    'id': '33986',  # OBOT'un ID'si
-    'convert': 'USD'
-}
-headers = {
-    'Accepts': 'application/json',
-    'X-CMC_PRO_API_KEY': '2b1d2be1-b8db-4e78-b793-a5467c44c588',
-}
+# Dexscreener API URL ve Parametreler
+CHAIN_ID = "solana"
+PAIR_ID = "7GqEtF893LmBj7XLmpEAswvE6bpoBP4aYTQK9xMrfNwb"
+DEXSCREENER_URL = f"https://api.dexscreener.com/latest/dex/pairs/{CHAIN_ID}/{PAIR_ID}"
 
+# Global fiyat değişkenleri
 current_price = {"price": 0.0}  # Mevcut fiyat
 previous_price = {"price": 0.0}  # Önceki fiyat
+
 
 # API'den fiyat çekme işlemi
 def fetch_price():
     global current_price, previous_price
-    session = Session()
-    session.headers.update(headers)
-
     while True:
         try:
-            response = session.get(url, params=parameters)
-            data = json.loads(response.text)
-            obot_price = data['data']['33986']['quote']['USD']['price']
+            response = requests.get(DEXSCREENER_URL)  # Dexscreener API çağrısı
+            data = response.json()
 
-            # Önceki fiyatı güncelle ve yeni fiyatı sakla
-            previous_price["price"] = current_price["price"]
-            current_price["price"] = obot_price
-            print(f"Fiyat güncellendi: {obot_price}")
-        except (ConnectionError, Timeout, TooManyRedirects) as e:
+            # `priceUsd` alanından fiyat bilgisi alınır
+            if data and data.get("pairs") and len(data["pairs"]) > 0:
+                dex_price = float(data["pairs"][0]["priceUsd"])
+                previous_price["price"] = current_price["price"]  # Önceki fiyatı güncelle
+                current_price["price"] = dex_price  # Mevcut fiyatı güncelle
+                print(f"Fiyat güncellendi: {dex_price}")
+            else:
+                print("Dexscreener API'den geçerli fiyat bilgisi alınamadı.")
+        except Exception as e:
             print(f"API hatası: {e}")
         
-        time.sleep(10)  # Her 10 saniyede bir fiyatı API'den güncelle
+        time.sleep(1.5)  # Her 5 saniyede bir API'yi çağır
+
 
 @app.route("/")
 def index():
     return render_template("index.html")
 
+
 @app.route("/price")
 def price():
-    # Sadece güncellenmiş fiyatları döndür
+    # JSON formatında güncellenmiş fiyatları döndür
     return jsonify({
         "current": current_price["price"],
         "previous": previous_price["price"]
     })
 
+
 if __name__ == "__main__":
-    # Fiyat çekme işlemini arka planda başlat
+    # Fiyat çekme işlemini ayrı bir thread ile başlat
     price_thread = threading.Thread(target=fetch_price)
     price_thread.daemon = True
     price_thread.start()
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+    app.run(debug=True)
+    #app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))

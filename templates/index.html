@@ -55,12 +55,11 @@
         const data = await response.json();
         const currentPrice = data.current;
 
-        if (currentPrice < previousPrice) {
-          priceElement.className = "red";
-        } else {
+        if (currentPrice > previousPrice) {
           priceElement.className = "green";
+        } else if (currentPrice < previousPrice) {
+          priceElement.className = "red";
         }
-
         const formattedPrice = currentPrice.toString().replace('.', ',');
         priceElement.textContent = formattedPrice;
         previousPrice = currentPrice;

@@ -1,67 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OBOT Live Price</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #121212;
-            color: white;
-        }
-        #price {
-            font-size: 80px;
-            margin-top: 20%;
-        }
-        .green {
-            color: #00ff00; /* Yeşil */
-        }
-        .red {
-            color: #ff0000; /* Kırmızı */
-        }
-        .neutral {
-            color: #ffffff; /* Beyaz */
-        }
-        .powered {
-            font-size: 14px;
-            color: #888;
-        }
-    </style>
-    <script>
-        let previousPrice = 0; // Önceki fiyat
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Price</title>
+  <style>
+    @font-face {
+      font-family: 'Neue Machina';
+      src: url('https://fonts.cdnfonts.com/s/16164/NeueMachina-Regular.woff') format('woff');
+    }
 
-        function fetchPrice() {
-            fetch("/price")
-                .then(response => response.json())
-                .then(data => {
-                    const currentPrice = data.current;
-                    const priceElement = document.getElementById("price");
+    body {
+      font-family: 'Neue Machina', Arial, sans-serif;
+      color: #47d7ac; /* Varsayılan renk */
+      background: black;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
 
-                    // Fiyat artışı/azalışına göre renk değişimi
-                    if (currentPrice < previousPrice) {
-                        priceElement.className = "red"; // Yeşil renk
-                    } else {
-                        priceElement.className = "green"; // Kırmızı renk
-                    }
+    #price {
+      font-size: 200px; /* Büyük font boyutu */
+      font-weight: bold;
+      margin: 0;
+    }
 
-                    // Fiyatı güncelle
-                    priceElement.textContent = `$${currentPrice.toFixed(6)}`;
-                    previousPrice = currentPrice; // Mevcut fiyatı sakla
-                })
-                .catch(error => console.error("Fiyat çekme hatası:", error));
-        }
+    #price.green {
+      color: #47d7ac; /* Yeşilimsi renk (artış) */
+    }
 
-        setInterval(fetchPrice, 5000); // Her 5 saniyede bir fiyatı güncelle
-        window.onload = fetchPrice;
-    </script>
+    #price.red {
+      color: #ff4c4c; /* Kırmızı renk (düşüş) */
+    }
+
+    #powered {
+      margin-top: 20px;
+      font-size: 16px;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+  </style>
+  <script>
+    let previousPrice = 0; // Önceki fiyat
+
+    function fetchPrice() {
+        fetch("/price") // Flask endpoint'ten fiyatı çek
+            .then(response => response.json())
+            .then(data => {
+                const currentPrice = data.current; // Mevcut fiyat
+                const priceElement = document.getElementById("price");
+
+                // Fiyat değişimine göre renk güncelleme
+                if (currentPrice < previousPrice) {
+                    priceElement.className = "red"; // Düşüş durumunda kırmızı renk
+                } else {
+                    priceElement.className = "green"; // Artış durumunda yeşil renk
+                }
+
+                // Noktayı virgül ile değiştirerek fiyatı ekrana yazdır
+                const formattedPrice = currentPrice.toFixed(6).replace('.', ',');
+                priceElement.textContent = `${formattedPrice}`;
+                previousPrice = currentPrice; // Mevcut fiyatı önceki fiyat olarak kaydet
+            })
+            .catch(error => console.error("Fiyat çekme hatası:", error));
+    }
+
+    setInterval(fetchPrice, 5000); // Her 5 saniyede bir fiyatı güncelle
+    window.onload = fetchPrice; // Sayfa yüklendiğinde fiyatı çek
+  </script>
 </head>
 <body>
-    <div>
-        <h1>OBOT Coin Live Price</h1>
-        <div id="price" class="neutral">Loading...</div>
-        <div class="powered">Powered by CoinMarketCap</div>
-    </div>
+  <div id="container">
+    <div id="price">Loading...</div>
+    <div id="powered">powered by OPERATIVES</div>
+  </div>
 </body>
 </html>

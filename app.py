@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, jsonify
 from requests import Session, ConnectionError, Timeout, TooManyRedirects
 import json
@@ -58,4 +59,4 @@ if __name__ == "__main__":
     price_thread = threading.Thread(target=fetch_price)
     price_thread.daemon = True
     price_thread.start()
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))

@@ -57,6 +57,10 @@ def price():
 def timer():
     return render_template('timer.html')
 
+@app.route('/obot')
+def obot():
+    return render_template('obot.html')
+
 
 if __name__ == "__main__":
     app.run(debug=True)

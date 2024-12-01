@@ -25,19 +25,27 @@
             height: 100vh;
         }
 
+        #price {
+            font-size: 8vw;
+            font-weight: bold;
+            margin: 0;
+            margin-right: 2.5vw;
+            word-wrap: break-word;
+        }
+
+        #change {
+            font-size: 0.8vw;
+            margin-top: 1vw;
+            margin-bottom: 1vw;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
         #powered,
         #left-message {
             margin-top: 10px;
             font-size: 0.8vw;
             color: #aaa;
             font-family: "Neue Machina", Arial, sans-serif;
-        }
-
-        #countdown {
-            font-size: 7.5vw;
-            font-weight: bold;
-            color: #fff7af;
-            margin-top: 4vw;
         }
 
         .social-icons {
@@ -59,6 +67,7 @@
             transform: scale(1.2);
             opacity: 1;
         }
+
         #top-button-container {
             position: absolute;
             top: 20px;
@@ -67,7 +76,7 @@
             gap: 10px;
         }
 
-        #obot-button,
+        #timer-button,
         #index-button {
             background-color: #7d7b7b;
             color: black;
@@ -80,7 +89,7 @@
             transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
-        #obot-button:hover,
+        #timer-button:hover,
         #index-button:hover {
             background-color: #aaa;
             transform: scale(1.1);
@@ -102,24 +111,22 @@
                 font-size: 2.5vw;
             }
 
-            #countdown {
-                font-size: 12vw;
-            }
-
             .social-icons a img {
                 width: 6vw;
             }
+
             #top-button-container {
                 top: 10px;
                 left: 10px;
                 gap: 5px;
             }
 
-            #index-button,
-            #obot-button {
+            #timer-button,
+            #index-button {
                 font-size: 0.9rem;
                 padding: 8px 16px;
             }
+
         }
 
         @media (max-width: 480px) {
@@ -138,70 +145,83 @@
                 font-size: 2.5vw;
             }
 
-            #countdown {
-                font-size: 12vw;
-            }
-
             .social-icons a img {
                 width: 6vw;
             }
+
             #top-button-container {
                 top: 5px;
                 left: 5px;
             }
 
-            #index-button,
-            #obot-button {
+            #timer-button,
+            #index-button {
                 font-size: 0.8rem;
                 padding: 6px 12px;
             }
         }
     </style>
     <script>
+        let previousPrice = 0;
 
-        function startCountdown(targetDate) {
-            const countdownElement = document.getElementById("countdown");
+        async function fetchPrice() {
+            const priceElement = document.getElementById("price");
+            const changeElement = document.getElementById("change");
 
-            function updateCountdown() {
-                const now = new Date().getTime();
-                const distance = targetDate - now;
+            try {
+                const response = await fetch("/price");
+                if (!response.ok) throw new Error("Network response was not ok");
 
-                if (distance <= 0) {
-                    countdownElement.textContent = "00:00:00:00";
-                    clearInterval(countdownInterval);
-                } else {
-                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                const data = await response.json();
+                const currentPrice = parseFloat(data.currentPrice).toFixed(6);
+                const previousPriceFromBackend = parseFloat(data.previousPrice).toFixed(6);
+                const change24h = parseFloat(data.priceChange);
 
-                    countdownElement.textContent = `${String(days).padStart(2, "0")}:${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+                priceElement.textContent = currentPrice.replace('.', ',');
+
+                if (data.currentPrice > data.previousPrice) {
+                    priceElement.className = "green";
+                } else if (data.currentPrice < data.previousPrice) {
+                    priceElement.className = "red";
                 }
-            }
 
-            const countdownInterval = setInterval(updateCountdown, 1000);
-            updateCountdown();
+                let emoji = "";
+                if (change24h > 200) {
+                    emoji = "🚀🚀🚀";
+                } else if (change24h > 100) {
+                    emoji = "🚀🚀";
+                } else if (change24h > 50) {
+                    emoji = "🚀";
+                }
+
+                changeElement.textContent = `${change24h.toFixed(2)}% ${emoji}`;
+                changeElement.style.color = change24h > 0 ? "#47d7ac" : "#ff4c4c";
+                changeElement.style.transform = "scale(1.5)";
+            } catch (error) {
+                console.error("Error fetching price:", error);
+                priceElement.textContent = "Network error";
+                priceElement.className = "neutral";
+            }
         }
 
         document.addEventListener("DOMContentLoaded", () => {
-            //fetchPrice();
-            //setInterval(fetchPrice, 1500);
+            fetchPrice();
+            setInterval(fetchPrice, 1500);
 
-            const countdownTarget = new Date("2024-12-02T12:00:00Z").getTime();
-            startCountdown(countdownTarget);
         });
-
     </script>
 </head>
 
 <body>
     <div id="top-button-container">
+        <button onclick="window.location.href='/timer'" id="timer-button">Timer</button>
         <button onclick="window.location.href='/'" id="index-button">Main</button>
-        <button onclick="window.location.href='/obot'" id="obot-button">Price</button>
     </div>
     <div id="container">
-        <div id="countdown">00:00:00:00</div>
-        <div id="left-message">Left for the $OBOT Warriors...</div>
+        <div id="price-container" style="display: inline-flex; align-items: center;">
+            <div id="price">Loading...</div>
+            <div id="change">Loading change...</div>
+        </div>
     </div>
     <div class="social-icons">
         <a href="https://discord.gg/zSe4mPuX" target="_blank" rel="noopener noreferrer">
@@ -211,7 +231,8 @@
             <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
         </a>
         <a href="https://x.com/oxyz" target="_blank" rel="noopener noreferrer">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/X_logo_2023_original.svg/1024px-X_logo_2023_original.svg.png" alt="X" style="filter: invert(1);">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/X_logo_2023_original.svg/1024px-X_logo_2023_original.svg.png"
+                alt="X" style="filter: invert(1);">
         </a>
     </div>
 </body>

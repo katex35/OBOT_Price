@@ -79,9 +79,12 @@
             position: absolute;
             top: 20px;
             left: 20px;
+            display: flex;
+            gap: 10px;
         }
 
-        #timer-button {
+        #timer-button,
+        #obot-button {
             background-color: #7d7b7b;
             color: black;
             font-family: "Neue Machina", Arial, sans-serif;
@@ -93,7 +96,8 @@
             transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
-        #timer-button:hover {
+        #timer-button:hover,
+        #obot-button:hover {
             background-color: #aaa;
             transform: scale(1.1);
         }
@@ -121,6 +125,19 @@
             .social-icons a img {
                 width: 6vw;
             }
+
+            #top-button-container {
+                top: 10px;
+                left: 10px;
+                gap: 5px;
+            }
+
+            #timer-button,
+            #obot-button {
+                font-size: 0.9rem;
+                padding: 8px 16px;
+            }
+
         }
 
         @media (max-width: 480px) {
@@ -145,6 +162,17 @@
 
             .social-icons a img {
                 width: 6vw;
+            }
+
+            #top-button-container {
+                top: 5px;
+                left: 5px;
+            }
+
+            #timer-button,
+            #obot-button {
+                font-size: 0.8rem;
+                padding: 6px 12px;
             }
         }
     </style>
@@ -174,11 +202,11 @@
 
                 let emoji = "";
                 if (change24h > 200) {
-                    emoji = "ðŸš€ðŸš€ðŸš€";
+                    emoji = "🚀🚀🚀";
                 } else if (change24h > 100) {
-                    emoji = "ðŸš€ðŸš€";
+                    emoji = "🚀🚀";
                 } else if (change24h > 50) {
-                    emoji = "ðŸš€";
+                    emoji = "🚀";
                 }
 
                 changeElement.textContent = `${change24h.toFixed(2)}% ${emoji}`;
@@ -227,7 +255,8 @@
 
 <body>
     <div id="top-button-container">
-        <button onclick="window.location.href='/timer'" id="timer-button">Timer Page</button>
+        <button onclick="window.location.href='/timer'" id="timer-button">Timer</button>
+        <button onclick="window.location.href='/'" id="obot-button">Price</button>
     </div>
     <div id="container">
         <div id="price-container" style="display: inline-flex; align-items: center;">

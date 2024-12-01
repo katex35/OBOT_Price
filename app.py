@@ -52,6 +52,10 @@ def price():
         })
     else:
         return jsonify({"error": "Failed to fetch price"}), 500
+    
+@app.route('/timer')
+def timer():
+    return render_template('timer.html')
 
 
 if __name__ == "__main__":

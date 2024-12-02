@@ -25,6 +25,12 @@
             height: 100vh;
         }
 
+        #logo {
+            width: 8vw;
+            margin-bottom: 0vw;
+            margin-top: -10vw;
+        }
+        
         .label {
             font-size: 1.5vw;
             font-weight: bold;
@@ -130,6 +136,9 @@
         @media (max-width: 768px) {
             .label {
                 font-size: 3vw;
+            }
+            #logo {
+                width: 15vw;
             }
 
             #price,
@@ -287,6 +296,7 @@
         <button onclick="window.location.href='/'" id="index-button">Main</button>
     </div>
     <div id="container">
+        <img id="logo" src="/static/images/obot.png" alt="Logo">
         <div id="price-container">
             <div class="price-block">
                 <span class="label">Solana:</span>

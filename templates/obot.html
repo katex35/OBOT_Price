@@ -30,7 +30,7 @@
             margin-bottom: 0vw;
             margin-top: -10vw;
         }
-        
+
         .label {
             font-size: 1.5vw;
             font-weight: bold;
@@ -133,10 +133,30 @@
             transform: scale(1.1);
         }
 
+        #mascot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 100px;
+            height: auto;
+            z-index: 100;
+        }
+
+        #mascot img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+
+        #mascot img:hover {
+            transform: scale(1.1);
+        }
+
         @media (max-width: 768px) {
             .label {
                 font-size: 3vw;
             }
+
             #logo {
                 width: 15vw;
             }
@@ -173,6 +193,10 @@
                 font-size: 0.9rem;
                 padding: 8px 16px;
             }
+            #mascot {
+                width: 50px;
+                height: auto;
+            }
 
         }
 
@@ -208,6 +232,10 @@
             #index-button {
                 font-size: 0.8rem;
                 padding: 6px 12px;
+            }
+            #mascot {
+                width: 50px;
+                height: auto;
             }
         }
     </style>
@@ -300,16 +328,19 @@
         <div id="price-container">
             <div class="price-block">
                 <span class="label">Solana:</span>
-                <span id="price">Loading Solana price...</span>
-                <span id="change">Loading Solana change...</span>
+                <span id="price">Loading...</span>
+                <span id="change">Loading</span>
             </div>
             <div class="price-block">
                 <span class="label">Aptos:</span>
-                <span id="aptos-price">Loading Aptos price...</span>
-                <span id="aptos-change">Loading Aptos change...</span>
+                <span id="aptos-price">Loading...</span>
+                <span id="aptos-change">Loading...</span>
             </div>
         </div>
         <div id="powered">powered by SuperMissO</div>
+        <div id="mascot">
+            <img src="/static/images/mascot.png" alt="Mascot">
+        </div>
     </div>
     <div class="social-icons">
         <a href="https://discord.gg/zSe4mPuX" target="_blank" rel="noopener noreferrer">

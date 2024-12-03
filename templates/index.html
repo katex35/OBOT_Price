@@ -216,15 +216,15 @@
 
                 const data = await response.json();
                 const currentPrice = parseFloat(data.currentPrice).toFixed(6);
-                const previousPriceFromBackend = parseFloat(data.previousPrice).toFixed(6);
+                //const previousPriceFromBackend = parseFloat(data.previousPrice).toFixed(6);
                 const change24h = parseFloat(data.priceChange);
 
                 priceElement.textContent = currentPrice.replace('.', ',');
 
-                if (data.currentPrice > data.previousPrice) {
-                    priceElement.className = "green";
-                } else if (data.currentPrice < data.previousPrice) {
-                    priceElement.className = "red";
+                if (currentPrice > previousPrice) {
+                    priceElement.style.color = "#47d7ac";
+                } else if (currentPrice < previousPrice) {
+                    priceElement.style.color = "#d94848";
                 }
 
                 let emoji = "";
@@ -239,6 +239,8 @@
                 changeElement.textContent = `${change24h.toFixed(2)}% ${emoji}`;
                 changeElement.style.color = change24h > 0 ? "#47d7ac" : "#ff4c4c";
                 changeElement.style.transform = "scale(1.5)";
+
+                previousPrice = currentPrice;
             } catch (error) {
                 console.error("Error fetching price:", error);
                 priceElement.textContent = "Network error";
@@ -290,9 +292,9 @@
             <div id="price">Loading...</div>
             <div id="change">Loading...</div>
         </div>
-        <div id="powered">powered by OPERATIVES</div>
-        <div id="countdown">∞:∞:∞:∞</div>
-        <div id="left-message">.....</div>
+        <div id="powered">powered by SuperMissO</div>
+        <!-- <div id="countdown">∞:∞:∞:∞</div>
+        <div id="left-message">.....</div> -->
         <div id="mascot">
             <img src="/static/images/mascot.png" alt="Mascot">
         </div>

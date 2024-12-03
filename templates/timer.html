@@ -104,9 +104,18 @@
         #mascot img:hover {
             transform: scale(1.1);
         }
-
+        
+        #logo {
+            width: 10vw;
+            margin-bottom: -5vw;
+            margin-top: -10vw;
+        }
 
         @media (max-width: 768px) {
+            #logo {
+                width: 20vw;
+            }
+
             #price {
                 font-size: 12vw;
             }
@@ -137,8 +146,8 @@
 
             #index-button,
             #obot-button {
-                font-size: 0.9rem;
-                padding: 8px 16px;
+                font-size: 0.6rem;
+                padding: 5px 10px;
             }
             #mascot {
                 width: 50px;
@@ -147,6 +156,10 @@
         }
 
         @media (max-width: 480px) {
+            #logo {
+                width: 20vw;
+            }
+            
             #price {
                 font-size: 12vw;
             }
@@ -163,7 +176,7 @@
             }
 
             #countdown {
-                font-size: 12vw;
+                font-size: 15vw;
             }
 
             .social-icons a img {
@@ -176,8 +189,8 @@
 
             #index-button,
             #obot-button {
-                font-size: 0.8rem;
-                padding: 6px 12px;
+                font-size: 0.6rem;
+                padding: 5px 10px;
             }
             #mascot {
                 width: 50px;
@@ -225,6 +238,7 @@
         <button onclick="window.location.href='/obot'" id="obot-button">Price</button>
     </div>
     <div id="container">
+        <img id="logo" src="/static/images/obot.png" alt="Logo">
         <div id="countdown">∞:∞:∞:∞</div>
         <!-- <div id="left-message">.....</div> -->
         <div id="mascot">
@@ -238,7 +252,7 @@
         <a href="https://t.me/oxyz_community" target="_blank" rel="noopener noreferrer">
             <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
         </a>
-        <a href="https://x.com/oxyz" target="_blank" rel="noopener noreferrer">
+        <a href="https://x.com/OBOT_OFFICIAL" target="_blank" rel="noopener noreferrer">
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/X_logo_2023_original.svg/1024px-X_logo_2023_original.svg.png" alt="X" style="filter: invert(1);">
         </a>
     </div>

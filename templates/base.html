@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.png">
+    <title>{% block title %}{% endblock %}</title>
+    <style>
+        @font-face {
+            font-family: "Neue Machina";
+            src: url("/static/fonts/NeueMachina-Regular.otf") format("opentype");
+        }
+
+        body {
+            font-family: "Neue Machina", Arial, sans-serif;
+            color: #47d7ac;
+            background: black;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #oxyz-logo {
+            position: fixed; 
+            top: 10px; 
+            right: 10px; 
+            width: 100px; 
+            height: auto;
+            z-index: 1000; 
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        #oxyz-logo:hover {
+            transform: scale(1.1); 
+            opacity: 0.9; 
+        }
+
+        .social-icons {
+            position: absolute;
+            bottom: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .social-icons a img {
+            width: 1.5vw;
+            height: auto;
+            opacity: 0.7;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        .social-icons a img:hover {
+            transform: scale(1.2);
+            opacity: 1;
+        }
+
+        #top-button-container {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            gap: 5px;
+        }
+
+        #timer-button,
+        #obot-button,
+        #index-button {
+            background-color: #7d7b7b;
+            color: black;
+            font-family: "Neue Machina", Arial, sans-serif;
+            font-size: 1rem;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        #timer-button:hover,
+        #obot-button:hover,
+        #index-button:hover {
+            background-color: #aaa;
+            transform: scale(1.1);
+        }
+
+        #mascot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 100px;
+            height: auto;
+            z-index: 100;
+        }
+
+        #mascot img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+
+        #mascot img:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            #oxyz-logo {
+                width: 80px;
+            }
+
+            .social-icons a img {
+                width: 6vw;
+            }
+
+            #top-button-container {
+                top: 10px;
+                left: 10px;
+                gap: 5px;
+            }
+
+            #timer-button,
+            #obot-button,
+            #index-button {
+                font-size: 0.9rem;
+                padding: 8px 16px;
+            }
+
+            #mascot {
+                width: 50px;
+                height: auto;
+            }
+
+        }
+        
+        @media (max-width: 480px) {
+            #oxyz-logo {
+                width: 60px; 
+            }
+
+
+            .social-icons a img {
+                width: 6vw;
+            }
+
+            #top-button-container {
+                top: 4px;
+                left: 2px;
+            }
+
+            #timer-button,
+            #obot-button,
+            #index-button {
+                font-size: 0.6rem;
+                padding: 6px 9px;
+            }
+            #mascot {
+                width: 50px;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <img id="oxyz-logo" src="/static/images/oxyzlogo.png" alt="Oxyz Logo">
+    <div id="top-button-container">
+        <button onclick="window.location.href='/'" id="index-button">Main</button>
+        <button onclick="window.location.href='/obot'" id="obot-button">Price</button>
+        <button onclick="window.location.href='/timer'" id="timer-button">Timer</button>
+    </div>
+    <div id="container">
+        {% block content %}
+
+        {% endblock %}
+    </div>
+    <div class="social-icons">
+        <a href="https://discord.gg/oxyz" target="_blank" rel="noopener noreferrer">
+            <img src="https://upload.wikimedia.org/wikipedia/tr/5/57/Discord_logo_old.png" alt="Discord">
+        </a>
+        <a href="https://t.me/oxyz_community" target="_blank" rel="noopener noreferrer">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
+        </a>
+        <a href="https://x.com/OBOT_OFFICIAL" target="_blank" rel="noopener noreferrer">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/X_logo_2023_original.svg/1024px-X_logo_2023_original.svg.png"
+                alt="X" style="filter: invert(1);">
+        </a>
+    </div>
+    {% block scripts %}
+    <!-- Sayfa özel script ve stil buraya eklenecek -->
+    {% endblock %}
+</body>
+
+</html>

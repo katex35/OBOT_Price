@@ -1,261 +1,97 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="/static/images/favicon.png">
-    <title>OBOT Live Price</title>
-    <style>
-        @font-face {
-            font-family: "Neue Machina";
-            src: url("/static/fonts/NeueMachina-Regular.otf") format("opentype");
+{% block title %}Timer{% endblock %}
+
+{% block content %}
+<img id="logo" src="/static/images/obot.png" alt="Logo">
+<div id="countdown">∞:∞:∞:∞</div>
+<!-- <div id="left-message">.....</div> -->
+<div id="mascot">
+    <img src="/static/images/mascot.png" alt="Mascot">
+</div>
+{% endblock %}
+
+{% block scripts %}
+<style>
+    #left-message {
+        margin-top: 10px;
+        font-size: 0.8vw;
+        color: #aaa;
+        font-family: "Neue Machina", Arial, sans-serif;
+    }
+
+    #countdown {
+        font-size: 7.5vw;
+        font-weight: bold;
+        color: #ffffff;
+        margin-top: 4vw;
+    }
+
+    #logo {
+        width: 10vw;
+        margin-bottom: -5vw;
+        margin-top: -10vw;
+    }
+
+    @media (max-width: 768px) {
+        #logo {
+            width: 20vw;
         }
 
-        body {
-            font-family: "Neue Machina", Arial, sans-serif;
-            color: #47d7ac;
-            background: black;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        #powered,
         #left-message {
-            margin-top: 10px;
-            font-size: 0.8vw;
-            color: #aaa;
-            font-family: "Neue Machina", Arial, sans-serif;
+            font-size: 2.5vw;
         }
 
         #countdown {
-            font-size: 7.5vw;
-            font-weight: bold;
-            color: #ffffff;
-            margin-top: 4vw;
+            font-size: 12vw;
         }
+    }
 
-        .social-icons {
-            position: absolute;
-            bottom: 20px;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .social-icons a img {
-            width: 1.5vw;
-            height: auto;
-            opacity: 0.7;
-            transition: transform 0.3s, opacity 0.3s;
-        }
-
-        .social-icons a img:hover {
-            transform: scale(1.2);
-            opacity: 1;
-        }
-        #top-button-container {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            display: flex;
-            gap: 10px;
-        }
-
-        #obot-button,
-        #index-button {
-            background-color: #7d7b7b;
-            color: black;
-            font-family: "Neue Machina", Arial, sans-serif;
-            font-size: 1rem;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-
-        #obot-button:hover,
-        #index-button:hover {
-            background-color: #aaa;
-            transform: scale(1.1);
-        }
-        #mascot {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 100px;
-            height: auto;
-            z-index: 100;
-        }
-
-        #mascot img {
-            width: 100%;
-            height: auto;
-            transition: transform 0.3s ease;
-        }
-
-        #mascot img:hover {
-            transform: scale(1.1);
+    @media (max-width: 480px) {
+        #logo {
+            width: 20vw;
         }
         
-        #logo {
-            width: 10vw;
-            margin-bottom: -5vw;
-            margin-top: -10vw;
+        #left-message {
+            font-size: 2.5vw;
         }
 
-        @media (max-width: 768px) {
-            #logo {
-                width: 20vw;
-            }
+        #countdown {
+            font-size: 15vw;
+        }
+    }
+</style>
+<script>
 
-            #price {
-                font-size: 12vw;
-            }
+    function startCountdown(targetDate) {
+        const countdownElement = document.getElementById("countdown");
 
-            #change {
-                font-size: 1.2vw;
-                margin-top: 1vw;
-                margin-bottom: 3vw;
-            }
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
 
-            #powered,
-            #left-message {
-                font-size: 2.5vw;
-            }
+            if (distance <= 0) {
+                countdownElement.textContent = "00:00:00:00";
+                clearInterval(countdownInterval);
+            } else {
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            #countdown {
-                font-size: 12vw;
-            }
-
-            .social-icons a img {
-                width: 6vw;
-            }
-            #top-button-container {
-                top: 10px;
-                left: 10px;
-                gap: 5px;
-            }
-
-            #index-button,
-            #obot-button {
-                font-size: 0.6rem;
-                padding: 5px 10px;
-            }
-            #mascot {
-                width: 50px;
-                height: auto;
+                countdownElement.textContent = `${String(days).padStart(2, "0")}:${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
             }
         }
 
-        @media (max-width: 480px) {
-            #logo {
-                width: 20vw;
-            }
-            
-            #price {
-                font-size: 12vw;
-            }
+        const countdownInterval = setInterval(updateCountdown, 1000);
+        updateCountdown();
+    }
 
-            #change {
-                font-size: 1.2vw;
-                margin-top: 1vw;
-                margin-bottom: 3vw;
-            }
+    document.addEventListener("DOMContentLoaded", () => {
+        //const countdownTarget = new Date("2024-12-02T12:00:00Z").getTime();
+        //startCountdown(countdownTarget);
+    });
 
-            #powered,
-            #left-message {
-                font-size: 2.5vw;
-            }
+</script>
 
-            #countdown {
-                font-size: 15vw;
-            }
-
-            .social-icons a img {
-                width: 6vw;
-            }
-            #top-button-container {
-                top: 5px;
-                left: 5px;
-            }
-
-            #index-button,
-            #obot-button {
-                font-size: 0.6rem;
-                padding: 5px 10px;
-            }
-            #mascot {
-                width: 50px;
-                height: auto;
-            }
-        }
-    </style>
-    <script>
-
-        function startCountdown(targetDate) {
-            const countdownElement = document.getElementById("countdown");
-
-            function updateCountdown() {
-                const now = new Date().getTime();
-                const distance = targetDate - now;
-
-                if (distance <= 0) {
-                    countdownElement.textContent = "00:00:00:00";
-                    clearInterval(countdownInterval);
-                } else {
-                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                    countdownElement.textContent = `${String(days).padStart(2, "0")}:${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-                }
-            }
-
-            const countdownInterval = setInterval(updateCountdown, 1000);
-            updateCountdown();
-        }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            //const countdownTarget = new Date("2024-12-02T12:00:00Z").getTime();
-            //startCountdown(countdownTarget);
-        });
-
-    </script>
-</head>
-
-<body>
-    <div id="top-button-container">
-        <button onclick="window.location.href='/'" id="index-button">Main</button>
-        <button onclick="window.location.href='/obot'" id="obot-button">Price</button>
-    </div>
-    <div id="container">
-        <img id="logo" src="/static/images/obot.png" alt="Logo">
-        <div id="countdown">∞:∞:∞:∞</div>
-        <!-- <div id="left-message">.....</div> -->
-        <div id="mascot">
-            <img src="/static/images/mascot.png" alt="Mascot">
-        </div>
-    </div>
-    <div class="social-icons">
-        <a href="https://discord.gg/oxyz" target="_blank" rel="noopener noreferrer">
-            <img src="https://upload.wikimedia.org/wikipedia/tr/5/57/Discord_logo_old.png" alt="Discord">
-        </a>
-        <a href="https://t.me/oxyz_community" target="_blank" rel="noopener noreferrer">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
-        </a>
-        <a href="https://x.com/OBOT_OFFICIAL" target="_blank" rel="noopener noreferrer">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/X_logo_2023_original.svg/1024px-X_logo_2023_original.svg.png" alt="X" style="filter: invert(1);">
-        </a>
-    </div>
-</body>
-
-</html>
+{% endblock %}

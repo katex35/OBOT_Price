@@ -67,7 +67,7 @@ def fetch_apt_price():
 @app.route("/")
 def home():
     """Home page"""
-    return render_template("index.html")
+    return render_template("timer.html")
 
 
 @app.route("/price")
@@ -91,9 +91,9 @@ def price():
 def timer():
     return render_template('timer.html')
 
-@app.route('/obot')
-def obot():
-    return render_template('obot.html')
+# @app.route('/obot')
+# def obot():
+#     return render_template('obot.html')
 
 # @app.route('/zenith')
 # def zenith():

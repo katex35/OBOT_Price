@@ -95,6 +95,9 @@ def timer():
 def obot():
     return render_template('obot.html')
 
+# @app.route('/zenith')
+# def zenith():
+#     return render_template('zenith.html')
 
 if __name__ == "__main__":
     app.run(debug=True)

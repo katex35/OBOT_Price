@@ -3,12 +3,10 @@
 {% block title %}Timer{% endblock %}
 
 {% block content %}
-<img id="logo" src="/static/images/obot.png" alt="Logo">
+<img id="logo" src="/static/images/ouroboros.png" alt="Logo">
 <div id="countdown">∞:∞:∞:∞</div>
 <!-- <div id="left-message">.....</div> -->
-<div id="mascot">
-    <img src="/static/images/mascot.png" alt="Mascot">
-</div>
+
 {% endblock %}
 
 {% block scripts %}
@@ -28,14 +26,14 @@
     }
 
     #logo {
-        width: 10vw;
-        margin-bottom: -5vw;
-        margin-top: -10vw;
+        width: 14vw;
+        margin-bottom: -2vw;
+        margin-top: -25vw;
     }
 
     @media (max-width: 768px) {
         #logo {
-            width: 20vw;
+            width: 25vw;
         }
 
         #left-message {
@@ -49,7 +47,7 @@
 
     @media (max-width: 480px) {
         #logo {
-            width: 20vw;
+            width: 25vw;
         }
         
         #left-message {

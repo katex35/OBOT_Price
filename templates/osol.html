@@ -3,10 +3,10 @@
 {% block title %}Timer{% endblock %}
 
 {% block content %}
- <div id="top-button-container">
-    <button onclick="window.location.href='/osol'" id="index-button">OSOL100</button>
+<div id="top-button-container">
+    <button onclick="window.location.href='/'" id="index-button">Ouroboros</button>
 </div>
-<img id="logo" src="/static/images/ouroboros.png" alt="Logo">
+<img id="logo" src="/static/images/osol.png" alt="Logo">
 <div id="countdown">∞:∞:∞:∞</div>
 <!-- <div id="left-message">.....</div> -->
 
@@ -29,7 +29,7 @@
     }
 
     #logo {
-        width: 14vw;
+        width: 12vw;
         margin-bottom: -2vw;
         margin-top: -25vw;
     }
@@ -89,7 +89,7 @@
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-        const countdownTarget = new Date("2025-02-22T00:00:00Z").getTime();
+        const countdownTarget = new Date("2024-12-24T05:21:25Z").getTime();
         startCountdown(countdownTarget);
     });
 

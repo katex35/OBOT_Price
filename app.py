@@ -91,6 +91,11 @@ def price():
 def timer():
     return render_template('timer.html')
 
+@app.route('/osol')
+def osol():
+    return render_template('osol.html')
+
+
 # @app.route('/obot')
 # def obot():
 #     return render_template('obot.html')

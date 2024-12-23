@@ -6,7 +6,7 @@ app = Flask(__name__)
 DEXSCREENER_URL = "https://api.dexscreener.com/latest/dex/pairs/solana/7GqEtF893LmBj7XLmpEAswvE6bpoBP4aYTQK9xMrfNwb"
 APT_DEXSCREENER_URL = "https://api.dexscreener.com/latest/dex/tokens/0x8512b34017e087c3707748869ddc317d83f3fe70ab3a162abdc055c761ca9906::OBOT::OBOT"
 OSOL_DEXSCREENER_URL = "https://api.dexscreener.com/latest/dex/tokens/HeLp6NuQkmYB4pYWo2zYs22mESHXPQYzXbB8n4V98jwC"
-OSOL_DEXSCREENER_URL = "https://api.dexscreener.com/latest/dex/tokens/7ukzrv5JkFrHCgGkv8GaUTxXhV2KHsCWcjzYqkNSTWZq"
+OSOL_DEXSCREENER_URL = "https://api.dexscreener.com/latest/dex/tokens/2otVNpcHXn9MKeDk3Zby5uanF3s7tki4toaJ3PZcXaUd"
 
 def format_market_cap(market_cap):
     if market_cap >= 1_000_000_000:

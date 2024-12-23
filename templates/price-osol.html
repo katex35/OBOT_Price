@@ -13,10 +13,7 @@
     <div class="price-block">
         <span id="marketcap" class="small-text">Loading</span>
     </div>
-    <!-- Timer Bölümü -->
-    <div id="countdown-container">
-        <div id="countdown">∞:∞:∞:∞</div>
-    </div>
+
 </div>
 <div id="powered">powered by SuperMissO</div>
 {% endblock %}
@@ -160,10 +157,15 @@
     }
 
     async function fetchPrice() {
+        
         const priceElement = document.getElementById("price");
         const marketCapElement = document.getElementById("marketcap");
         const changeElement = document.getElementById("change");
         marketCapElement.style.color = "white";
+        priceElement.classList.remove("small-text");
+        priceElement.classList.add("large-text");
+        marketCapElement.classList.remove("small-text");
+        marketCapElement.classList.add("large-text");
 
         try {
             const response = await fetch("/price");
@@ -245,7 +247,7 @@
         fetchPrice();
         setInterval(fetchPrice, 2000);
 
-        const countdownTarget = new Date("2024-12-24T05:21:25Z").getTime();
+        const countdownTarget = new Date("2024-12-21T05:21:25Z").getTime();
         startCountdown(countdownTarget);
     });
 </script>

@@ -6,7 +6,7 @@
 <img id="logo" src="/static/images/logo_osol.png" alt="Logo">
 <div id="price-container">
     <div class="price-block">
-        <span class="label">Price:</span>
+        <span class="label">OSOL:</span>
         <span id="price" class="small-text">Loading...</span>
         <span id="change">Loading</span>
     </div>
@@ -29,7 +29,7 @@
     }
 
     .label {
-        font-size: 1.5vw;
+        font-size: 1.2vw;
         font-weight: bold;
         color: #aaa;
         margin-right: 2vw;
@@ -64,7 +64,7 @@
     }
 
     .large-text {
-        font-size: 5vw; 
+        font-size: 4vw; 
     }
 
     #change {
@@ -76,13 +76,13 @@
 
 
     #countdown-container {
-        margin-top: 2vw;
+        margin-top: 1vw;
     }
 
     #countdown {
-        font-size: 6vw; 
+        font-size: 4vw; 
         font-weight: bold;
-        color: #ffffff;
+        color: #ffffff90;
     }
 
     @media (max-width: 768px) {
@@ -163,7 +163,8 @@
         const marketCapElement = document.getElementById("marketcap");
         const changeElement = document.getElementById("change");
         marketCapElement.style.color = "white";
-
+        priceElement.classList.add("large-text");
+        marketCapElement.classList.add("large-text");
 
         try {
             const response = await fetch("/price");
@@ -222,10 +223,10 @@
                 clearInterval(countdownInterval);
 
                 countdownContainer.style.display = "none";
-                priceElement.classList.remove("small-text");
-                priceElement.classList.add("large-text");
-                marketCapElement.classList.remove("small-text");
-                marketCapElement.classList.add("large-text");
+                // priceElement.classList.remove("small-text");
+                // priceElement.classList.add("large-text");
+                // marketCapElement.classList.remove("small-text");
+                // marketCapElement.classList.add("large-text");
             } else {
                 const days = Math.floor(distance / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -244,7 +245,7 @@
         fetchPrice();
         setInterval(fetchPrice, 2000);
 
-        const countdownTarget = new Date("2024-12-23T18:45:00Z").getTime();
+        const countdownTarget = new Date("2025-02-22T00:00:00Z").getTime();
         startCountdown(countdownTarget);
     });
 </script>

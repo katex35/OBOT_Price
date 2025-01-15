@@ -6,6 +6,11 @@
 <img id="logo" src="/static/images/ouroboros.png" alt="Logo">
 <div id="price-container">
     <div class="price-block">
+        <span class="label">OBOT:</span>
+        <span id="obot-price" class="small-text">Loading...</span>
+        <span id="obot-change">Loading</span>
+    </div>
+    <div class="price-block">
         <span class="label">OSOL:</span>
         <span id="price" class="small-text">Loading...</span>
         <span id="change">Loading</span>
@@ -67,7 +72,7 @@
         font-size: 4vw; 
     }
 
-    #change {
+    #change, #obot-change {
         font-size: 1vw;
         color: #aaa;
         align-self: center;
@@ -102,7 +107,7 @@
             font-size: 10vw;
         }
 
-        #change {
+        #change, #obot-change {
             font-size: 3vw;
             margin-top: 1vw;
             margin-bottom: 3vw;
@@ -126,7 +131,7 @@
             font-size: 12vw;
         }
 
-        #change {
+        #change, #obot-change {
             font-size: 1.5vw;
             margin-top: 1vw;
             margin-bottom: 3vw;
@@ -144,6 +149,7 @@
 
 <script>
     let previousPrice = 0;
+    let previousObotPrice = 0;
 
     function formatMarketCap(marketCap) {
         if (marketCap >= 1_000_000_000) {
@@ -158,13 +164,15 @@
     }
 
     async function fetchPrice() {
-        
         const priceElement = document.getElementById("price");
+        const obotPriceElement = document.getElementById("obot-price");
         const marketCapElement = document.getElementById("marketcap");
         const changeElement = document.getElementById("change");
+        const obotChangeElement = document.getElementById("obot-change");
         marketCapElement.style.color = "white";
         priceElement.classList.add("large-text");
         marketCapElement.classList.add("large-text");
+        obotPriceElement.classList.add("large-text");
 
         try {
             const response = await fetch("/price");
@@ -172,6 +180,9 @@
 
             const data = await response.json();
             const currentPrice = parseFloat(data.osolCurrentPrice).toFixed(6);
+            const obotCurrentPrice = parseFloat(data.currentPrice).toFixed(6);
+            const obotChange24h = parseFloat(data.priceChange).toFixed(2);
+
             if (isNaN(currentPrice)) {
                 priceElement.textContent = "Waiting for the launch";
                 marketCapElement.textContent = "Waiting for the launch";
@@ -182,8 +193,8 @@
             const change24h = parseFloat(data.osolPriceChange);
 
             priceElement.textContent = currentPrice.replace('.', ',');
-            //marketCapElement.textContent = marketCap.toLocaleString();
-            marketCapElement.textContent = formatMarketCap(marketCap); 
+            obotPriceElement.textContent = obotCurrentPrice.replace('.', ',');
+            marketCapElement.textContent = formatMarketCap(marketCap);
 
             if (currentPrice > previousPrice) {
                 priceElement.style.color = "#47d7ac";
@@ -191,18 +202,37 @@
                 priceElement.style.color = "#d94848";
             }
 
-            let emoji = "";
-            if (change24h > 200) {
-                emoji = "🚀🚀🚀";
-            } else if (change24h > 100) {
-                emoji = "🚀🚀";
-            } else if (change24h > 50) {
-                emoji = "🚀";
+            if (obotCurrentPrice > previousObotPrice) {
+                obotPriceElement.style.color = "#47d7ac";
+            } else if (obotCurrentPrice < previousObotPrice) {
+                obotPriceElement.style.color = "#d94848";
             }
-            changeElement.textContent = `${change24h.toFixed(2)}% ${emoji}`;
+
+            let obotEmoji = "";
+            if (obotChange24h > 200) {
+                obotEmoji = "🚀🚀🚀";
+            } else if (obotChange24h > 100) {
+                obotEmoji = "🚀🚀";
+            } else if (obotChange24h > 50) {
+                obotEmoji = "🚀";
+            }
+
+            obotChangeElement.textContent = `${obotChange24h}% ${obotEmoji}`;
+            obotChangeElement.style.color = obotChange24h > 0 ? "#47d7ac" : "#ff4c4c";
+
+            let osolEmoji = "";
+            if (change24h > 200) {
+                osolEmoji = "🚀🚀🚀";
+            } else if (change24h > 100) {
+                osolEmoji = "🚀🚀";
+            } else if (change24h > 50) {
+                osolEmoji = "🚀";
+            }
+            changeElement.textContent = `${change24h.toFixed(2)}% ${osolEmoji}`;
             changeElement.style.color = change24h > 0 ? "#47d7ac" : "#ff4c4c";
 
             previousPrice = currentPrice;
+            previousObotPrice = obotCurrentPrice;
         } catch (error) {
             console.error("Error fetching price:", error);
         }
